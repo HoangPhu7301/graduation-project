@@ -2,29 +2,46 @@
   <div id="wrapper">
     <nav class="navbar is-dark">
       <div class="navbar-brand">
-        <router-link to="/" class="navbar-item"><strong>Green Medical</strong></router-link>
+        <router-link to="/" class="navbar-item"
+          ><strong>Green Medical</strong></router-link
+        >
 
-        <a class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbar-menu" @click="showMobileMenu = !showMobileMenu">
+        <a
+          class="navbar-burger"
+          aria-label="menu"
+          aria-expanded="false"
+          data-target="navbar-menu"
+          @click="showMobileMenu = !showMobileMenu"
+        >
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
         </a>
       </div>
 
-      <div class="navbar-menu" id="navbar-menu" v-bind:class="{'is-active': showMobileMenu }">
+      <div
+        class="navbar-menu"
+        id="navbar-menu"
+        v-bind:class="{ 'is-active': showMobileMenu }"
+      >
         <div class="navbar-start">
           <div class="navbar-item">
             <form method="get" action="/search">
               <div class="field has-addons">
                 <div class="control">
-                  <input type="text" class="input" placeholder="What are you looking for?" name="query">
+                  <input
+                    type="text"
+                    class="input"
+                    placeholder="What are you looking for?"
+                    name="query"
+                  />
                 </div>
 
                 <div class="control">
                   <button class="button is-success">
-                      <span class="icon">
+                    <span class="icon">
                       <i class="fas fa-search"></i>
-                      </span>
+                    </span>
                   </button>
                 </div>
               </div>
@@ -33,17 +50,31 @@
         </div>
 
         <div class="navbar-end">
-          <router-link to="/Allergies" class="navbar-item">Allergies</router-link>
-          <router-link to="/Inflame" class="navbar-item">Inflame</router-link>
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">Categories</a>
+
+            <div class="navbar-dropdown">
+              <router-link to="/Allergies" class="navbar-item"
+                >Allergies</router-link
+              >
+              <router-link to="/Inflame" class="navbar-item"
+                >Inflame</router-link
+              >
+              <router-link to="/phone" class="navbar-item">phone</router-link>
+            </div>
+          </div>
 
           <div class="navbar-item">
             <div class="buttons">
               <template v-if="$store.state.isAuthenticated">
-                <router-link to="/my-account" class="button is-light">My account</router-link>
+                <router-link to="/my-account" class="button is-light"
+                  >My account</router-link
+                >
               </template>
-
               <template v-else>
-                <router-link to="/log-in" class="button is-light">Log in</router-link>
+                <router-link to="/log-in" class="button is-light"
+                  >Log in</router-link
+                >
               </template>
 
               <router-link to="/cart" class="button is-success">
@@ -56,62 +87,72 @@
       </div>
     </nav>
 
-    <div class="is-loading-bar has-text-centered" v-bind:class="{'is-loading': $store.state.isLoading }">
+    <div
+      class="is-loading-bar has-text-centered"
+      v-bind:class="{ 'is-loading': $store.state.isLoading }"
+    >
       <div class="lds-dual-ring"></div>
     </div>
 
     <section class="section">
-      <router-view/>
+      <router-view />
     </section>
 
     <footer class="footer">
-      <p class="has-text-centered">contact 089990541</p>
+      <div class="content has-text-centered">
+        <p><strong>Green Medical</strong> &copy; 2023. All rights reserved.</p>
+        <p>
+          Contact us at <a href="tel:+089990541">089990541</a> or email us at
+          <a href="mailto:contact@greenmedical.com">contact@greenmedical.com</a
+          >.
+        </p>
+      </div>
     </footer>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+import axios from "axios";
 
 export default {
   data() {
     return {
       showMobileMenu: false,
       cart: {
-        items: []
-      }
-    }
+        items: [],
+      },
+    };
   },
   beforeCreate() {
-    this.$store.commit('initializeStore')
+    this.$store.commit("initializeStore");
 
-    const token = this.$store.state.token
+    const token = this.$store.state.token;
 
     if (token) {
-        axios.defaults.headers.common['Authorization'] = "Token " + token
+      axios.defaults.headers.common["Authorization"] = "Token " + token;
     } else {
-        axios.defaults.headers.common['Authorization'] = ""
+      axios.defaults.headers.common["Authorization"] = "";
     }
   },
   mounted() {
-    this.cart = this.$store.state.cart
+    this.cart = this.$store.state.cart;
   },
   computed: {
-      cartTotalLength() {
-          let totalLength = 0
+    cartTotalLength() {
+      let totalLength = 0;
 
-          for (let i = 0; i < this.cart.items.length; i++) {
-              totalLength += this.cart.items[i].quantity
-          }
-
-          return totalLength
+      for (let i = 0; i < this.cart.items.length; i++) {
+        totalLength += this.cart.items[i].quantity;
       }
-  }
-}
+
+      return totalLength;
+    },
+  },
+};
 </script>
 
 <style lang="scss">
-@import '../node_modules/bulma';
+@import "../node_modules/bulma";
 
 .lds-dual-ring {
   display: inline-block;
